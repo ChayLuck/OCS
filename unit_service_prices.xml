@@ -39,12 +39,13 @@
 
 
             <!--tr data rating 10  -->
+            //price burda değişiyor örnekte ama döndürmüyor şimdilik bu düzeltilir
 
             <service serviceName="data-tr-rt10">
                 <type>data</type>
                 <location>90</location>
                 <rating>10</rating>
-                <price>0</price>
+                <price>8</price>
             </service>
 
 
