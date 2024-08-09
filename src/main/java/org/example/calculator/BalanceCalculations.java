@@ -17,68 +17,71 @@ public class BalanceCalculations {
 
         int requestUsageAmount = requestMessage.getUsageAmount();
         double totalPrice = requestMessage.getTotalUsagePrice();
+        long msisdn = Long.parseLong(requestMessage.getSenderMSISDN());
 
-        BigDecimal userVoiceBalance = voltOperation.getVoiceBalance(requestMessage.getSenderMSISDN());
-        BigDecimal userWalletBalance = voltOperation.getSubscriberBalance(requestMessage.getSenderMSISDN());
-        long uID = voltOperation.getUidByMSISDN(requestMessage.getSenderMSISDN());
+
+        var userVoiceBalance = voltOperation.getMinutesBalance(msisdn);
+        var userWalletBalance = voltOperation.getMoneyBalance(msisdn);
+        var uID = voltOperation.getUserID(msisdn);
+
 
         System.out.println("User ID: "+(int)uID);
         System.out.println("Request Amount: "+requestUsageAmount);
         System.out.println("Total Price: "+(int) totalPrice);
-        System.out.println("Voice Balance: "+userVoiceBalance.intValueExact());
-        System.out.println("Wallet Balance: "+userWalletBalance.intValueExact());
+        System.out.println("Voice Balance: "+userVoiceBalance);
+        System.out.println("Wallet Balance: "+userWalletBalance);
 
-        if(userVoiceBalance.intValueExact() <= 0){
+        if(userVoiceBalance <= 0){
 
-            if(userWalletBalance.intValueExact() <= 0){
+            if(userWalletBalance <= 0){
 
                 System.out.println("No Sufficient VOICE and WALLET Balance");
 
-            } else if(userWalletBalance.intValueExact() >= totalPrice){
+            } else if(userWalletBalance >= totalPrice){
 
                 System.out.println("VOICE Request * WALLET * Condition");
 
 
                 System.out.println("VOICE request Used ** WALLET ** Balance");
-                voltOperation.sendSubscriberBalance(requestMessage.getSenderMSISDN(), -((int) totalPrice));
-                //kafkaOperator.sendKafkaWalletMessage(requestMessage.getSenderMSISDN(), (int) uID, (int)totalPrice);
+                voltOperation.updateMoneyBalance(msisdn, -((int) totalPrice));
+                //kafkaOperator.sendKafkaWalletMessage(msisdn, (int) uID, (int)totalPrice);
                 System.out.println("*** DB SENT ***");
 
-            } else if(userWalletBalance.intValueExact() < totalPrice){
+            } else if(userWalletBalance < totalPrice){
 
                 System.out.println("No Sufficient WALLET Balance");
 
             }
-        } else if(userVoiceBalance.intValueExact() >= requestUsageAmount){
+        } else if(userVoiceBalance >= requestUsageAmount){
 
             System.out.println("VOICE Request * NORMAL * Condition");
 
 
             System.out.println("VOICE request Used ** BALANCE **  Used");
-            voltOperation.sendVoiceAmount(requestMessage.getSenderMSISDN(), requestUsageAmount);
-            //kafkaOperator.sendKafkaUsageMessage(requestMessage.getType(), requestMessage.getSenderMSISDN(), (int) uID, requestMessage.getUsageAmount());
+            voltOperation.updateVoiceBalance(msisdn, requestUsageAmount);
+            //kafkaOperator.sendKafkaUsageMessage(requestMessage.getType(), msisdn, (int) uID, requestMessage.getUsageAmount());
             System.out.println("*** DB SENT ***");
 
-        } else if(userVoiceBalance.intValueExact() < requestUsageAmount){
+        } else if(userVoiceBalance < requestUsageAmount){
 
             System.out.println("VOICE Request * CALCULATED * Condition");
 
 
-            requestMessage.setUsageAmount(requestUsageAmount - userVoiceBalance.intValueExact());
+            requestMessage.setUsageAmount(requestUsageAmount - userVoiceBalance);
             requestMessage.calculateTotalPrice();
 
             System.out.println("Voice Request Used ** CALCULATED WALLET ** Balance");
-            voltOperation.sendSubscriberBalance(requestMessage.getSenderMSISDN(), -((int) requestMessage.getTotalUsagePrice()));
-            //kafkaOperator.sendKafkaWalletMessage(requestMessage.getSenderMSISDN(), (int) uID, (int) requestMessage.getTotalUsagePrice());
+            voltOperation.updateMoneyBalance(msisdn, -((int) requestMessage.getTotalUsagePrice()));
+            //kafkaOperator.sendKafkaWalletMessage(msisdn, (int) uID, (int) requestMessage.getTotalUsagePrice());
             System.out.println("*** DB SENT ***");
 
 
-            int remainingVoiceAmount =  userVoiceBalance.intValueExact();
+            int remainingVoiceAmount =  userVoiceBalance;
 
 
             System.out.println("Voice Request Used ** CALCULATED VOICE ** Balance");
-            voltOperation.sendVoiceAmount(requestMessage.getSenderMSISDN(), remainingVoiceAmount);
-            //kafkaOperator.sendKafkaUsageMessage(requestMessage.getType(), requestMessage.getSenderMSISDN(), (int) uID, userVoiceBalance.intValueExact());
+            voltOperation.updateVoiceBalance(msisdn, remainingVoiceAmount);
+            //kafkaOperator.sendKafkaUsageMessage(requestMessage.getType(), msisdn, (int) uID, userVoiceBalance);
             System.out.println("*** DB SENT ***");
         }
     }
@@ -88,28 +91,29 @@ public class BalanceCalculations {
 
         int requestUsageAmount = requestMessage.getUsageAmount();
         double totalPrice = requestMessage.getTotalUsagePrice();
+        long msisdn = Long.parseLong(requestMessage.getSenderMSISDN());
 
-        BigDecimal userSMSBalance = voltOperation.getSMSBalance(requestMessage.getSenderMSISDN());
-        BigDecimal userWalletBalance = voltOperation.getSubscriberBalance(requestMessage.getSenderMSISDN());
-        long uID = voltOperation.getUidByMSISDN(requestMessage.getSenderMSISDN());
+        var userSMSBalance = voltOperation.getSmsBalance(msisdn);
+        var userWalletBalance = voltOperation.getMoneyBalance(msisdn);
+        var uID = voltOperation.getUserID(msisdn);
 
         System.out.println("User ID: "+(int)uID);
         System.out.println("Request Amount: "+requestUsageAmount);
         System.out.println("Total Price: "+(int) totalPrice);
-        System.out.println("SMS Balance: "+userSMSBalance.intValueExact());
-        System.out.println("Wallet Balance: "+userWalletBalance.intValueExact());
+        System.out.println("SMS Balance: "+userSMSBalance);
+        System.out.println("Wallet Balance: "+userWalletBalance);
 
-        if(userSMSBalance.intValueExact() <= 0){
-            if(userWalletBalance.intValueExact() <= 0){
+        if(userSMSBalance <= 0){
+            if(userWalletBalance <= 0){
 
                 System.out.println("No Sufficient WALLET and SMS Balance");
 
-            } else if (userWalletBalance.intValueExact() >= totalPrice) {
+            } else if (userWalletBalance >= totalPrice) {
                 System.out.println("SMS Request * WALLET * Condition");
 
                 System.out.println("SMS request Used ** WALLET ** Balance");
-                voltOperation.sendSubscriberBalance(requestMessage.getSenderMSISDN(), -((int) totalPrice));
-                //kafkaOperator.sendKafkaWalletMessage(requestMessage.getSenderMSISDN(), (int) uID, (int)totalPrice);
+                voltOperation.updateMoneyBalance(msisdn, -((int) totalPrice));
+                //kafkaOperator.sendKafkaWalletMessage(msisdn, (int) uID, (int)totalPrice);
                 System.out.println("*** DB SENT ***");
 
             }
@@ -117,8 +121,8 @@ public class BalanceCalculations {
             System.out.println("SMS Request * NORMAL * Condition");
 
             System.out.println("SMS request Used ** SMS ** Balance");
-            voltOperation.sendSmsAmount(requestMessage.getSenderMSISDN(), requestMessage.getUsageAmount());
-            //kafkaOperator.sendKafkaUsageMessage(requestMessage.getType(), requestMessage.getSenderMSISDN(), (int) uID, requestUsageAmount);
+            voltOperation.updateSmsBalance(msisdn, requestMessage.getUsageAmount());
+            //kafkaOperator.sendKafkaUsageMessage(requestMessage.getType(), msisdn, (int) uID, requestUsageAmount);
             System.out.println("*** DB SENT ***");
 
         }
@@ -130,62 +134,63 @@ public class BalanceCalculations {
 
         int requestUsageAmount = requestMessage.getUsageAmount();
         double totalPrice = requestMessage.getTotalUsagePrice();
+        long msisdn = Long.parseLong(requestMessage.getSenderMSISDN());
 
 
-        BigDecimal userDataBalance = voltOperation.getDataBalance(requestMessage.getSenderMSISDN());
-        BigDecimal userWalletBalance = voltOperation.getSubscriberBalance(requestMessage.getSenderMSISDN());
-        long uID = voltOperation.getUidByMSISDN(requestMessage.getSenderMSISDN());
+        var userDataBalance = voltOperation.getMinutesBalance(msisdn);
+        var userWalletBalance = voltOperation.getMoneyBalance(msisdn);
+        var uID = voltOperation.getUserID(msisdn);
 
         System.out.println("User ID: "+(int)uID);
         System.out.println("Request Amount: "+requestUsageAmount);
         System.out.println("Total Price: "+(int) totalPrice);
-        System.out.println("DATA Balance: "+userDataBalance.intValueExact());
-        System.out.println("Wallet Balance: "+userWalletBalance.intValueExact());
+        System.out.println("DATA Balance: "+userDataBalance);
+        System.out.println("Wallet Balance: "+userWalletBalance);
 
-        if(userDataBalance.intValueExact() <= 0){
+        if(userDataBalance <= 0){
 
-            if(userWalletBalance.intValueExact() <= 0){
+            if(userWalletBalance <= 0){
 
                 System.out.println("No Sufficient VOICE and WALLET Balance");
 
-            } else if(userWalletBalance.intValueExact() >= totalPrice){
+            } else if(userWalletBalance >= totalPrice){
 
                 System.out.println("DATA request Used ** BALANCE **  Used");
-                voltOperation.sendSubscriberBalance(requestMessage.getSenderMSISDN(), -((int) totalPrice));
-                //kafkaOperator.sendKafkaWalletMessage(requestMessage.getSenderMSISDN(), (int) uID, (int)totalPrice);
+                voltOperation.updateMoneyBalance(msisdn, -((int) totalPrice));
+                //kafkaOperator.sendKafkaWalletMessage(msisdn, (int) uID, (int)totalPrice);
                 System.out.println("*** DB SENT ***");
 
-            } else if(userWalletBalance.intValueExact() < totalPrice){
+            } else if(userWalletBalance < totalPrice){
 
                 System.out.println("No Sufficient WALLET Balance");
 
             }
-        } else if(userDataBalance.intValueExact() >= requestUsageAmount){
+        } else if(userDataBalance >= requestUsageAmount){
             System.out.println("DATA Request * NORMAL * Condition");
 
-            voltOperation.sendGbAmount(requestMessage.getSenderMSISDN(), requestUsageAmount);
-            //kafkaOperator.sendKafkaUsageMessage(requestMessage.getType(), requestMessage.getSenderMSISDN(), (int) uID, requestMessage.getUsageAmount());
+            voltOperation.updateDataBalance(msisdn, requestUsageAmount);
+            //kafkaOperator.sendKafkaUsageMessage(requestMessage.getType(), msisdn, (int) uID, requestMessage.getUsageAmount());
             System.out.println("*** DB SENT ***");
 
-        } else if(userDataBalance.intValueExact() < requestUsageAmount){
+        } else if(userDataBalance < requestUsageAmount){
 
-            requestMessage.setUsageAmount(requestUsageAmount - userDataBalance.intValueExact());
-            System.out.println("New Usage Amount: "+ (requestUsageAmount - userDataBalance.intValueExact()));
+            requestMessage.setUsageAmount(requestUsageAmount - userDataBalance);
+            System.out.println("New Usage Amount: "+ (requestUsageAmount - userDataBalance));
             requestMessage.calculateTotalPrice();
             System.out.println("Calculated Total Price: "+ requestMessage.getTotalUsagePrice());
 
             System.out.println("DATA Request Used ** CALCULATED WALLET ** Balance");
-            voltOperation.sendSubscriberBalance(requestMessage.getSenderMSISDN(), -((int) requestMessage.getTotalUsagePrice()));
-            //kafkaOperator.sendKafkaWalletMessage(requestMessage.getSenderMSISDN(), (int) uID, (int) requestMessage.getTotalUsagePrice());
+            voltOperation.updateMoneyBalance(msisdn, -((int) requestMessage.getTotalUsagePrice()));
+            //kafkaOperator.sendKafkaWalletMessage(msisdn, (int) uID, (int) requestMessage.getTotalUsagePrice());
             System.out.println("*** DB SENT ***");
 
 
-            int remainingDataAmount =  userDataBalance.intValueExact();
+            int remainingDataAmount =  userDataBalance;
             System.out.println("RemainingDataAmount: "+ remainingDataAmount);
 
             System.out.println("DATA Request Used ** CALCULATED VOICE ** Balance");
-            voltOperation.sendVoiceAmount(requestMessage.getSenderMSISDN(), remainingDataAmount);
-            //kafkaOperator.sendKafkaUsageMessage(requestMessage.getType(), requestMessage.getSenderMSISDN(), (int) uID, userDataBalance.intValueExact());
+            voltOperation.updateVoiceBalance(msisdn, remainingDataAmount);
+            //kafkaOperator.sendKafkaUsageMessage(requestMessage.getType(), msisdn, (int) uID, userDataBalance);
             System.out.println("*** DB SENT ***");
         }
     }
