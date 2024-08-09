@@ -18,5 +18,9 @@ public class Main {
 
         final ActorRef listener = system.actorOf(AkkaListener.props(), "listener");
 
+        final ActorRef akkaListener = system.actorOf(AkkaListener.props(), "akkaListener");
+
+        akkaListener.tell("{\"type\": \"voice\", \"senderMSISDN\": \"1234567890\", \"usageAmount\": 10}", ActorRef.noSender());
+
     }
 }

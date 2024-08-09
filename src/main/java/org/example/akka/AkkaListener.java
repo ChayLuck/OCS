@@ -9,10 +9,9 @@ import org.example.requestConfigurator.XmlConfigParser;
 
 import java.io.File;
 
-
 public class AkkaListener extends AbstractActor {
 
-    BalanceCalculations calculator = new BalanceCalculations();
+    private final BalanceCalculations calculator = new BalanceCalculations();
 
     public static Props props() {
         return Props.create(AkkaListener.class, AkkaListener::new);
@@ -22,26 +21,38 @@ public class AkkaListener extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 .match(String.class, message -> {
-                    System.out.println(message);
+                    System.out.println("Received message: " + message);
 
-                    AkkaRequestMessage requestMessage = MessageConverter.createMessageFromJSON(message);
-                    System.out.println("Request RECIEVED");
+                    AkkaRequestMessage requestMessage;
+                    try {
+                        requestMessage = MessageConverter.createMessageFromJSON(message);
+                    } catch (Exception e) {
+                        System.err.println("Failed to parse JSON message: " + e.getMessage());
+                        return;
+                    }
+                    System.out.println("Request RECEIVED");
 
-                    //set price data from config XML
+                    // Set price data from config XML
                     File xmlFile = new File("unit_service_prices.xml");
                     new XmlConfigParser().parseAndAssign(requestMessage, xmlFile);
                     System.out.println("Request PARSED");
-                    System.out.println("Request UNIT PRICE calculated: "+requestMessage.getUnitPrice());
+                    System.out.println("Request UNIT PRICE calculated: " + requestMessage.getUnitPrice());
 
                     requestMessage.calculateTotalPrice();
-                    System.out.println("Request PRICE calculated");
-                    System.out.println("Request TOTALPRICE calculated: "+requestMessage.getTotalUsagePrice());
+                    System.out.println("Request TOTALPRICE calculated: " + requestMessage.getTotalUsagePrice());
 
                     switch (requestMessage.getType()) {
-                        case "voice" -> calculator.calculateVoiceRequest(requestMessage);
-                        case "sms" -> calculator.calculateSMSRequest(requestMessage);
-                        case "data" -> calculator.calculateDataRequest(requestMessage);
-                        default -> System.out.println("Invalid request type" + requestMessage.getType());
+                        case "voice":
+                            calculator.calculateVoiceRequest(requestMessage);
+                            break;
+                        case "sms":
+                            calculator.calculateSMSRequest(requestMessage);
+                            break;
+                        case "data":
+                            calculator.calculateDataRequest(requestMessage);
+                            break;
+                        default:
+                            System.out.println("Invalid request type: " + requestMessage.getType());
                     }
                 })
                 .build();
