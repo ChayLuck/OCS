@@ -23,12 +23,30 @@
                 <price>1.5</price>
             </service>
 
+            //Kendi paketlerimiz denemelik
+
             <service serviceName="data-out">
                 <type>data</type>
                 <location>49</location>
                 <rating>0</rating>
                 <price>20</price>
             </service>
+
+            <service serviceName="voice-out">
+                <type>voice</type>
+                <location>49</location>
+                <rating>0</rating>
+                <price>20</price>
+            </service>
+
+            <service serviceName="sms-out">
+                <type>sms</type>
+                <location>49</location>
+                <rating>0</rating>
+                <price>20</price>
+            </service>
+
+            // bitti
 
             <service serviceName="data-out-rt10">
                 <type>data</type>
