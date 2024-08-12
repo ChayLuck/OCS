@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class VoltDbOperation {
 
     private final String IP = "35.198.145.16";
-    private final int PORT = 32776;
+    private final int PORT = 32794;
 
     private final Client clientInstance;
 
