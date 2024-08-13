@@ -41,8 +41,8 @@ public class KafkaOperator {
     }
 
     //usage mesajları
-    public void sendKafkaUsageMessage(String type, long msisdn, int userId, int amount, int remain) {
-        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount\": %d, \"remain\": %d}", type, msisdn, userId, amount, remain);
+    public void sendKafkaUsageMessage(String type, long msisdn, int userId, int amount, int remain,String name,String surname,String email) {
+        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount\": %d, \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type, msisdn, userId, amount, remain,name,surname,email);
         sendKafkaMessage(message);
     }
 }

@@ -38,6 +38,57 @@ public class VoltDbOperation {
         return -1;
     }
 
+    public String getUserName(long MSISDN) {
+        ClientResponse response = null;
+
+        try {
+            response = clientInstance.callProcedure("GetCustomerInfo", MSISDN);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        if (checkResponse(response)) {
+            return response.getResults()[0].getString("NAME");
+        }
+
+        return null;
+    }
+
+    public String getUserSurname(long MSISDN) {
+        ClientResponse response = null;
+
+        try {
+            response = clientInstance.callProcedure("GetCustomerInfo", MSISDN);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        if (checkResponse(response)) {
+            return response.getResults()[0].getString("SURNAME");
+        }
+
+        return null;
+    }
+
+    public String getUserMail(long MSISDN) {
+        ClientResponse response = null;
+
+        try {
+            response = clientInstance.callProcedure("GetCustomerInfo", MSISDN);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        if (checkResponse(response)) {
+            return response.getResults()[0].getString("EMAIL");
+        }
+
+        return null;
+    }
+
     public int getPackageInternet(long MSISDN) {
         ClientResponse response = null;
 
