@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 public class KafkaOperator {
 
     private final KafkaProducer<String, String> producer;
-    private final String topic = "CGF"; //Kafka topic'i
+    private final String topic = "chf"; //Kafka topic'i
 
     public KafkaOperator() {
         Properties props = new Properties();
@@ -51,6 +51,12 @@ public class KafkaOperator {
     }
     public void sendKafkaDataUsageMessage(String type, long msisdn, int userId, int amount, int bal_lvl_data,String name,String surname,String email) {
         String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount_data\": %d, \"bal_lvl_data\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type, msisdn, userId, amount, bal_lvl_data,name,surname,email);
+        sendKafkaMessage(message);
+    }
+
+    //threshold mesajları
+    public void sendKafkaUsageThresholdMessage(String type, long msisdn, int userId) {
+        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d,}", type, msisdn, userId);
         sendKafkaMessage(message);
     }
 }

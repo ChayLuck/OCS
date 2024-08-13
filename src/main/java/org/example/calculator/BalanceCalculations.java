@@ -133,4 +133,31 @@ public class BalanceCalculations {
              kafkaOperator.sendKafkaDataUsageMessage(requestMessage.getType(), msisdn, uID, userDataBalance,voltOperation.getInternetBalance(msisdn),voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn));
         }
     }
+
+    public void checkUsageThreshold(String type, String msisdn,AkkaRequestMessage requestMessage) {
+
+
+        int threshold80;
+        int threshold100 = 0;
+        switch (type) {
+            case "data":
+                threshold80 = (int) (voltOperation.getPackageMinutes(Long.parseLong(msisdn)) * 0.20);
+                break;
+            case "sms":
+                threshold80 = (int) (voltOperation.getPackageSms(Long.parseLong(msisdn)) * 0.20);
+                break;
+            case "voice":
+                threshold80 = (int) (voltOperation.getPackageInternet(Long.parseLong(msisdn)) * 0.20);
+                break;
+            default:
+                return;
+        }
+        if (voltOperation.getMinutesBalance(Long.parseLong(msisdn)) <= threshold100) {
+            kafkaOperator.sendKafkaUsageThresholdMessage(type, Long.parseLong(msisdn), Integer.parseInt("100%"));
+        } else if (voltOperation.getMinutesBalance(Long.parseLong(msisdn)) <= threshold80) {
+            kafkaOperator.sendKafkaUsageThresholdMessage(type, Long.parseLong(msisdn), Integer.parseInt("80%"));
+        }
+    }
+
+
 }
