@@ -1,7 +1,7 @@
-package org.example.requestConfigurator;
+package com.i2i.intern.pixcell.requestConfigurator;
 
 
-import org.example.requestMessage.AkkaRequestMessage;
+import com.i2i.intern.pixcell.requestMessage.AkkaRequestMessage;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

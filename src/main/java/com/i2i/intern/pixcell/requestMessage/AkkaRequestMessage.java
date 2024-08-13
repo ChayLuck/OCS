@@ -1,4 +1,4 @@
-package org.example.requestMessage;
+package com.i2i.intern.pixcell.requestMessage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,8 +1,8 @@
-package org.example.calculator;
+package com.i2i.intern.pixcell.calculator;
 
-import org.example.kafka.KafkaOperator;
-import org.example.requestMessage.AkkaRequestMessage;
-import org.example.voltdb.VoltDbOperation;
+import com.i2i.intern.pixcell.kafka.KafkaOperator;
+import com.i2i.intern.pixcell.requestMessage.AkkaRequestMessage;
+import com.i2i.intern.pixcell.voltdb.VoltDbOperation;
 
 public class BalanceCalculations {
 

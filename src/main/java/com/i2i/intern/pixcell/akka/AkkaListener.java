@@ -1,11 +1,11 @@
-package org.example.akka;
+package com.i2i.intern.pixcell.akka;
 
 import akka.actor.AbstractActor;
 import akka.actor.Props;
-import org.example.requestMessage.AkkaRequestMessage;
-import org.example.calculator.BalanceCalculations;
-import org.example.requestMessage.MessageConverter;
-import org.example.requestConfigurator.XmlConfigParser;
+import com.i2i.intern.pixcell.calculator.BalanceCalculations;
+import com.i2i.intern.pixcell.requestConfigurator.XmlConfigParser;
+import com.i2i.intern.pixcell.requestMessage.AkkaRequestMessage;
+import com.i2i.intern.pixcell.requestMessage.MessageConverter;
 
 import java.io.File;
 

@@ -1,4 +1,4 @@
-package org.example.voltdb;
+package com.i2i.intern.pixcell.voltdb;
 
 import org.voltdb.client.*;
 import java.io.IOException;

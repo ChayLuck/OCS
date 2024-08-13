@@ -1,11 +1,11 @@
-package org.example;
+package com.i2i.intern.pixcell;
 
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import org.example.akka.AkkaListener;
+import com.i2i.intern.pixcell.akka.AkkaListener;
 
 import java.io.File;
 
