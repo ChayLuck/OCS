@@ -41,8 +41,16 @@ public class KafkaOperator {
     }
 
     //usage mesajları
-    public void sendKafkaUsageMessage(String type, long msisdn, int userId, int amount, int remain,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount\": %d, \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type, msisdn, userId, amount, remain,name,surname,email);
+    public void sendKafkaVoiceUsageMessage(String type, long msisdn, int userId, int amount, int bal_lvl_minutes,String name,String surname,String email) {
+        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount_minutes\": %d, \"bal_lvl_minutes\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type, msisdn, userId, amount, bal_lvl_minutes,name,surname,email);
+        sendKafkaMessage(message);
+    }
+    public void sendKafkaSmsUsageMessage(String type, long msisdn, int userId, int amount, int bal_lvl_sms,String name,String surname,String email) {
+        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount_sms\": %d, \"bal_lvl_sms\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type, msisdn, userId, amount, bal_lvl_sms,name,surname,email);
+        sendKafkaMessage(message);
+    }
+    public void sendKafkaDataUsageMessage(String type, long msisdn, int userId, int amount, int bal_lvl_data,String name,String surname,String email) {
+        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount_data\": %d, \"bal_lvl_data\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type, msisdn, userId, amount, bal_lvl_data,name,surname,email);
         sendKafkaMessage(message);
     }
 }
