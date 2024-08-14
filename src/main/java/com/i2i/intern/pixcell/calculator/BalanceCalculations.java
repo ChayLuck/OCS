@@ -36,6 +36,7 @@ public class BalanceCalculations {
                 voltOperation.updateMoneyBalance(msisdn, -((int) totalPrice));
                 System.out.println("*** DB SENT ***");
                  kafkaOperator.sendKafkaWalletMessage(msisdn, uID, (int) totalPrice);
+                System.out.println("*** KAFKA SENT ***");
             } else {
                 System.out.println("No Sufficient WALLET Balance");
             }
@@ -47,6 +48,7 @@ public class BalanceCalculations {
              kafkaOperator.sendKafkaUsageVoiceMessage(msisdn,voltOperation.getMinutesBalance(msisdn),requestUsageAmount);
              kafkaOperator.sendKafkaBalanceVoiceMessage(msisdn,voltOperation.getMinutesBalance(msisdn),requestUsageAmount,voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn));
              kafkaOperator.sendKafkaNotificationVoiceMessage(msisdn,voltOperation.getMinutesBalance(msisdn),requestUsageAmount,voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn));
+            System.out.println("*** KAFKA SENT ***");
         } else {
             // Handle case where voice balance is insufficient
             int remainingUsage = requestUsageAmount - userVoiceBalance;
@@ -60,6 +62,7 @@ public class BalanceCalculations {
              kafkaOperator.sendKafkaUsageVoiceMessage(msisdn,voltOperation.getMinutesBalance(msisdn),requestUsageAmount);
              kafkaOperator.sendKafkaBalanceVoiceMessage(msisdn,voltOperation.getMinutesBalance(msisdn),requestUsageAmount,voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn));
              kafkaOperator.sendKafkaNotificationVoiceMessage(msisdn,voltOperation.getMinutesBalance(msisdn),requestUsageAmount,voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn));
+            System.out.println("*** KAFKA SENT ***");
         }
     }
 
@@ -88,6 +91,7 @@ public class BalanceCalculations {
                 voltOperation.updateMoneyBalance(msisdn, -((int) totalPrice));
                 System.out.println("*** DB SENT ***");
                  kafkaOperator.sendKafkaWalletMessage(msisdn, uID, (int) totalPrice);
+                System.out.println("*** KAFKA SENT ***");
             }
         } else {
             System.out.println("SMS Request * NORMAL * Condition");
@@ -97,6 +101,7 @@ public class BalanceCalculations {
              kafkaOperator.sendKafkaUsageSmsMessage(msisdn,voltOperation.getSmsBalance(msisdn),requestUsageAmount);
              kafkaOperator.sendKafkaBalanceSmsMessage(msisdn,voltOperation.getSmsBalance(msisdn),requestUsageAmount,voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn));
              kafkaOperator.sendKafkaNotificationSmsMessage(msisdn,voltOperation.getSmsBalance(msisdn),requestUsageAmount,voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn));
+            System.out.println("*** KAFKA SENT ***");
         }
     }
 
@@ -125,6 +130,7 @@ public class BalanceCalculations {
                 voltOperation.updateMoneyBalance(msisdn, -((int) totalPrice));
                 System.out.println("*** DB SENT ***");
                  kafkaOperator.sendKafkaWalletMessage(msisdn, uID, (int) totalPrice);
+                System.out.println("*** KAFKA SENT ***");
             } else {
                 System.out.println("No Sufficient WALLET Balance");
             }
@@ -136,6 +142,7 @@ public class BalanceCalculations {
              kafkaOperator.sendKafkaUsageDataMessage(msisdn,voltOperation.getInternetBalance(msisdn),requestUsageAmount,requestMessage.getDate());
              kafkaOperator.sendKafkaBalanceDataMessage(msisdn,voltOperation.getInternetBalance(msisdn),requestUsageAmount,voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn));
              kafkaOperator.sendKafkaNotificationDataMessage(msisdn,voltOperation.getInternetBalance(msisdn),requestUsageAmount,voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn));
+            System.out.println("*** KAFKA SENT ***");
         } else {
             int remainingUsage = requestUsageAmount - userDataBalance;
             requestMessage.setUsageAmount(remainingUsage);
@@ -148,6 +155,7 @@ public class BalanceCalculations {
              kafkaOperator.sendKafkaUsageDataMessage(msisdn,voltOperation.getInternetBalance(msisdn),requestUsageAmount,requestMessage.getDate());
              kafkaOperator.sendKafkaBalanceDataMessage(msisdn,voltOperation.getInternetBalance(msisdn),requestUsageAmount,voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn));
              kafkaOperator.sendKafkaNotificationDataMessage(msisdn,voltOperation.getInternetBalance(msisdn),requestUsageAmount,voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn));
+            System.out.println("*** KAFKA SENT ***");
         }
     }
 
