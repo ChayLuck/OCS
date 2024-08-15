@@ -1,5 +1,6 @@
 package com.i2i.intern.pixcell.voltdb;
 
+import org.voltdb.VoltTable;
 import org.voltdb.client.*;
 import java.io.IOException;
 import java.util.Arrays;
@@ -89,100 +90,63 @@ public class VoltDbOperation {
         return null;
     }
 
-    public int getPackageInternet(long MSISDN) {
+    private VoltTable getPackageDetailsByCustomerId(int cust_id) {
         ClientResponse response = null;
 
         try {
-            response = clientInstance.callProcedure("GetPackageData", MSISDN);
+            response = clientInstance.callProcedure("PackageDetailsByID", cust_id);
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
 
         if (checkResponse(response)) {
-            return (int) response.getResults()[0].getLong(0);
+            return response.getResults()[0];
         }
-        return -1;
+
+        return response.getResults()[0];
     }
 
-    public int getPackageSms(long MSISDN) {
-        ClientResponse response = null;
+    public int getCustomerPackageMinutes(long msisdn) {
+        var id = getUserID(msisdn);
+        var table = getPackageDetailsByCustomerId(id);
 
-        try {
-            response = clientInstance.callProcedure("GetPackageSms", MSISDN);
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        if (checkResponse(response)) {
-            return (int) response.getResults()[0].getLong(0);
-        }
-        return -1;
+        return (int) table.getLong("AMOUNT_MINUTES");
     }
 
-    public int getPackageMinutes(long MSISDN) {
-        ClientResponse response = null;
+    public int getCustomerPackageSms(long msisdn) {
+        var id = getUserID(msisdn);
+        var table = getPackageDetailsByCustomerId(id);
 
-        try {
-            response = clientInstance.callProcedure("GetPackageMinutes", MSISDN);
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        if (checkResponse(response)) {
-            return (int) response.getResults()[0].getLong(0);
-        }
-        return -1;
+        return (int) table.getLong("AMOUNT_SMS");
     }
 
-    public int getPackagePeriod(long MSISDN) {
-        ClientResponse response = null;
+    public int getCustomerPackageData(long msisdn) {
+        var id = getUserID(msisdn);
+        var table = getPackageDetailsByCustomerId(id);
 
-        try {
-            response = clientInstance.callProcedure("GetPackagePeriod", MSISDN);
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        if (checkResponse(response)) {
-            return (int) response.getResults()[0].getLong(0);
-        }
-        return -1;
+        return (int) table.getLong("AMOUNT_DATA");
     }
 
-    public int getPackagePrice(long MSISDN) {
-        ClientResponse response = null;
+    public int getCustomerPackagePeriod(long msisdn) {
+        var id = getUserID(msisdn);
+        var table = getPackageDetailsByCustomerId(id);
 
-        try {
-            response = clientInstance.callProcedure("GetPackagePrice", MSISDN);
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        if (checkResponse(response)) {
-            return (int) response.getResults()[0].getLong(0);
-        }
-        return -1;
+        return (int) table.getLong("PERIOD");
     }
 
-    public String getPackageName(long MSISDN) {
-        ClientResponse response = null;
+    public int getCustomerPackagePrice(long msisdn) {
+        var id = getUserID(msisdn);
+        var table = getPackageDetailsByCustomerId(id);
 
-        try {
-            response = clientInstance.callProcedure("GetPackageName", MSISDN);
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return (int) table.getLong("PRICE");
+    }
 
-        if (checkResponse(response)) {
-            return (String) response.getResults()[0].getString(0);
-        }
-        return "";
+    public String getCustomerPackageName(long msisdn) {
+        var id = getUserID(msisdn);
+        var table = getPackageDetailsByCustomerId(id);
+
+        return table.getString("PACKAGE_NAME");
     }
 
     public int getInternetBalance(long MSISDN) {

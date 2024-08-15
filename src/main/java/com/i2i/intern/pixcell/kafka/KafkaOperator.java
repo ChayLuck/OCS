@@ -12,7 +12,6 @@ import java.util.concurrent.Future;
 public class KafkaOperator {
 
     private final KafkaProducer<String, String> producer;
-    //Kafka topic'i
     private final String topicCHF = "CHF";
     private final String topicBalance = "balanceTopic";
     private final String topicUsage = "usage";
@@ -44,68 +43,69 @@ public class KafkaOperator {
         sendKafkaMessage(topicCHF,message);
     }
 
-    //usage mesajları
-    public void sendKafkaVoiceUsageMessage(String type, long msisdn, int userId, int amount, int bal_lvl_minutes,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount_minutes\": %d, \"bal_lvl_minutes\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type, msisdn, userId, amount, bal_lvl_minutes,name,surname,email);
+    //CHF mesajları
+    public void sendKafkaVoiceUsageMessage(String type, long msisdn, int userId, int amount, int remain,String name,String surname,String email) {
+        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount_minutes\": %d, \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type, msisdn, userId, amount, remain,name,surname,email);
         sendKafkaMessage(topicCHF, message);
     }
-    public void sendKafkaSmsUsageMessage(String type, long msisdn, int userId, int amount, int bal_lvl_sms,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount_sms\": %d, \"bal_lvl_sms\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type, msisdn, userId, amount, bal_lvl_sms,name,surname,email);
+    public void sendKafkaSmsUsageMessage(String type, long msisdn, int userId, int amount, int remain,String name,String surname,String email) {
+        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount_sms\": %d, \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type, msisdn, userId, amount, remain,name,surname,email);
         sendKafkaMessage(topicCHF,message);
     }
-    public void sendKafkaDataUsageMessage(String type, long msisdn, int userId, int amount, int bal_lvl_data,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount_data\": %d, \"bal_lvl_data\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type, msisdn, userId, amount, bal_lvl_data,name,surname,email);
+    public void sendKafkaDataUsageMessage(String type, long msisdn, int userId, int amount, int remain,String name,String surname,String email) {
+        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d, \"amount_data\": %d, \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type, msisdn, userId, amount, remain,name,surname,email);
         sendKafkaMessage(topicCHF,message);
     }
 
     //threshold mesajları
-    public void sendKafkaUsageThresholdMessage(String type, long msisdn, int userId) {
-        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"userId\": %d,}", type, msisdn, userId);
-        sendKafkaMessage(topicCHF,message);
+    public void sendKafkaUsageThresholdMessage(String type, long msisdn, String threshold) {
+        String message = String.format("{\"type\": \"%s\", \"msisdn\": \"%d\", \"threshold\": %s,}", type, msisdn, threshold);
+        sendKafkaMessage(topicNotification,message);
     }
+
 
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //usage topic date ekle
-    public void sendKafkaUsageDataMessage(String type,long msisdn, int bal_lvl_data, int amount,String date) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"bal_lvl_data\": %d, \"amount_data\": %d, \"date\": %s}",type, msisdn, bal_lvl_data,amount,date);
+    //usage topic date ekle CGF
+    public void sendKafkaUsageDataMessage(String type,long msisdn, int remain) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d}",type, msisdn, remain);
         sendKafkaMessage(topicUsage,message);
     }
-    public void sendKafkaUsageVoiceMessage(String type,long msisdn, int bal_lvl_minutes, int amount) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"bal_lvl_minutes\": %d, \"amount_minutes\": %d}",type, msisdn, bal_lvl_minutes,amount);
+    public void sendKafkaUsageVoiceMessage(String type,long msisdn, int remain) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d}",type, msisdn, remain);
         sendKafkaMessage(topicUsage,message);
     }
-    public void sendKafkaUsageSmsMessage(String type,long msisdn, int bal_lvl_sms, int amount) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"bal_lvl_sms\": %d, \"amount_sms\": %d}",type, msisdn, bal_lvl_sms,amount);
+    public void sendKafkaUsageSmsMessage(String type,long msisdn, int remain) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d}",type, msisdn, remain);
         sendKafkaMessage(topicUsage,message);
     }
 
-    //balance topic
-    public void sendKafkaBalanceDataMessage(String type,long msisdn, int bal_lvl_data, int amount,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"bal_lvl_data\": %d, \"amount_data\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}", type,msisdn, bal_lvl_data,amount,name,surname,email);
+    //balance topic ABMF
+    public void sendKafkaBalanceDataMessage(String type,long msisdn, int remain) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d}", type,msisdn, remain);
         sendKafkaMessage(topicBalance,message);
     }
-    public void sendKafkaBalanceVoiceMessage(String type,long msisdn, int bal_lvl_minutes, int amount,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"bal_lvl_minutes\": %d, \"amount_minutes\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}",type, msisdn, bal_lvl_minutes,amount,name,surname,email);
+    public void sendKafkaBalanceVoiceMessage(String type,long msisdn, int remain) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d}",type, msisdn, remain);
         sendKafkaMessage(topicBalance,message);
     }
-    public void sendKafkaBalanceSmsMessage(String type,long msisdn, int bal_lvl_sms, int amount,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"bal_lvl_sms\": %d, \"amount_sms\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}",type, msisdn, bal_lvl_sms,amount,name,surname,email);
+    public void sendKafkaBalanceSmsMessage(String type,long msisdn, int remain) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d}",type, msisdn, remain);
         sendKafkaMessage(topicBalance,message);
     }
 
-    //Notification topic
-    public void sendKafkaNotificationDataMessage(String type,long msisdn, int bal_lvl_data, int amount,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"bal_lvl_data\": %d, \"amount_data\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}",type, msisdn, bal_lvl_data,amount,name,surname,email);
+    //Notification topic NF
+    public void sendKafkaNotificationDataMessage(String type,long msisdn, int remain,String name,String surname,String email) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}",type, msisdn, remain,name,surname,email);
         sendKafkaMessage(topicNotification,message);
     }
-    public void sendKafkaNotificationVoiceMessage(String type,long msisdn, int bal_lvl_minutes, int amount,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"bal_lvl_minutes\": %d, \"amount_minutes\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}",type, msisdn, bal_lvl_minutes,amount,name,surname,email);
+    public void sendKafkaNotificationVoiceMessage(String type,long msisdn, int remain,String name,String surname,String email) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}",type, msisdn, remain,name,surname,email);
         sendKafkaMessage(topicNotification,message);
     }
-    public void sendKafkaNotificationSmsMessage(String type,long msisdn, int bal_lvl_sms, int amount,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"bal_lvl_sms\": %d, \"amount_sms\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}",type, msisdn, bal_lvl_sms,amount,name,surname,email);
+    public void sendKafkaNotificationSmsMessage(String type,long msisdn, int remain,String name,String surname,String email) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}",type, msisdn, remain,name,surname,email);
         sendKafkaMessage(topicNotification,message);
     }
 
