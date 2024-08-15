@@ -38,8 +38,8 @@ public class KafkaOperator {
     }
 
     //wallet mesajları
-    public void sendKafkaWalletMessage(long msisdn, int remain, int amount) {
-        String message = String.format("{\"type\": \"wallet\", \"msisdn\": \"%d\", \"remain\": %d, \"amount\": %d}", msisdn, remain, amount);
+    public void sendKafkaWalletMessage(String type,long msisdn, int remain) {
+        String message = String.format("{\"type\": \"wallet\", \"msisdn\": \"%d\", \"remain\": %d}", msisdn, remain);
         sendKafkaMessage(topicBalance,message);
     }
 
