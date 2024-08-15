@@ -96,16 +96,16 @@ public class KafkaOperator {
     }
 
     //Notification topic NF
-    public void sendKafkaNotificationDataMessage(String type,long msisdn, int remain,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}",type, msisdn, remain,name,surname,email);
+    public void sendKafkaNotificationDataMessage(String type,long msisdn, int remain,String name,String surname,String email,int packageBalance) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s, \"packageBalance\": %d}",type, msisdn, remain,name,surname,email,packageBalance);
         sendKafkaMessage(topicNotification,message);
     }
-    public void sendKafkaNotificationVoiceMessage(String type,long msisdn, int remain,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}",type, msisdn, remain,name,surname,email);
+    public void sendKafkaNotificationVoiceMessage(String type,long msisdn, int remain,String name,String surname,String email,int packageBalance) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s, \"packageBalance\": %d}",type, msisdn, remain,name,surname,email,packageBalance);
         sendKafkaMessage(topicNotification,message);
     }
-    public void sendKafkaNotificationSmsMessage(String type,long msisdn, int remain,String name,String surname,String email) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s}",type, msisdn, remain,name,surname,email);
+    public void sendKafkaNotificationSmsMessage(String type,long msisdn, int remain,String name,String surname,String email,int packageBalance) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d, \"name\": %s, \"surname\": %s, \"email\": %s, \"packageBalance\": %d}",type, msisdn, remain,name,surname,email,packageBalance);
         sendKafkaMessage(topicNotification,message);
     }
 
