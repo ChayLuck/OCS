@@ -20,9 +20,9 @@ public class Main {
 
         final ActorRef akkaListener = system.actorOf(AkkaListener.props(), "akkaListener");
 
-        akkaListener.tell("{\"type\": \"voice\", \"senderMSISDN\": \"55485037740\", \"Location\": 49, \"usageAmount\": 50  }", ActorRef.noSender());
-        akkaListener.tell("{\"type\": \"data\", \"senderMSISDN\": \"21111111111\",\"Location\": 49, \"ratingNumber\": 0, \"usageAmount\": 50  }", ActorRef.noSender());
-        akkaListener.tell("{\"type\": \"sms\", \"senderMSISDN\": \"12345678992\", \"Location\": 49, \"usageAmount\": 5000  }", ActorRef.noSender());
+        akkaListener.tell("{\"type\": \"voice\", \"senderMSISDN\": \"12345678994\", \"Location\": 49, \"usageAmount\": 50000  }", ActorRef.noSender());
+        akkaListener.tell("{\"type\": \"data\", \"senderMSISDN\": \"12345678994\",\"Location\": 49, \"ratingNumber\": 0, \"usageAmount\": 50000  }", ActorRef.noSender());
+        akkaListener.tell("{\"type\": \"sms\", \"senderMSISDN\": \"12345678994\", \"Location\": 49, \"usageAmount\": 50000 }", ActorRef.noSender());
 
 
     }

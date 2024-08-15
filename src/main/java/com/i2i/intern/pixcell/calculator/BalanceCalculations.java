@@ -49,7 +49,13 @@ public class BalanceCalculations {
              kafkaOperator.sendKafkaBalanceVoiceMessage(requestMessage.getType(),msisdn,voltOperation.getMinutesBalance(msisdn));
              kafkaOperator.sendKafkaNotificationVoiceMessage(requestMessage.getType(),msisdn,voltOperation.getMinutesBalance(msisdn),voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn), voltOperation.getCustomerPackageMinutes(msisdn));
             System.out.println("*** KAFKA SENT ***");
-        } else {
+        }
+        else if (requestUsageAmount > userVoiceBalance){
+            System.out.println("Too big setting balance to 0");
+            voltOperation.setMinutesBalance(0,msisdn);
+
+        }
+        else {
             // Handle case where voice balance is insufficient
             int remainingUsage = requestUsageAmount - userVoiceBalance;
             requestMessage.setUsageAmount(remainingUsage);
@@ -93,7 +99,16 @@ public class BalanceCalculations {
                 kafkaOperator.sendKafkaWalletMessage(requestMessage.getType(), msisdn,  voltOperation.getMoneyBalance(msisdn));
                 System.out.println("*** KAFKA SENT ***");
             }
-        } else {
+
+
+        }
+        else if (requestUsageAmount > userSMSBalance){
+            System.out.println("Too big setting balance to 0");
+            voltOperation.setSmsBalance(0,msisdn);
+
+        }
+
+        else {
             System.out.println("SMS Request * NORMAL * Condition");
             voltOperation.updateSmsBalance(msisdn, -requestUsageAmount);
             System.out.println("*** DB SENT ***");
@@ -137,13 +152,20 @@ public class BalanceCalculations {
             System.out.println("DATA Request * NORMAL * Condition");
             voltOperation.updateDataBalance(msisdn, -requestUsageAmount);
             System.out.println("*** DB SENT ***");
-             checkUsageThreshold(requestMessage.getType(),msisdn);
+             //checkUsageThreshold(requestMessage.getType(),msisdn);
              kafkaOperator.sendKafkaDataUsageMessage(requestMessage.getType(), msisdn, uID, requestUsageAmount,voltOperation.getInternetBalance(msisdn),voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn));
              kafkaOperator.sendKafkaUsageDataMessage(requestMessage.getType(),msisdn,voltOperation.getInternetBalance(msisdn),requestUsageAmount);
              kafkaOperator.sendKafkaBalanceDataMessage(requestMessage.getType(),msisdn,voltOperation.getInternetBalance(msisdn));
              kafkaOperator.sendKafkaNotificationDataMessage(requestMessage.getType(),msisdn,voltOperation.getInternetBalance(msisdn),voltOperation.getUserName(msisdn),voltOperation.getUserSurname(msisdn),voltOperation.getUserMail(msisdn), voltOperation.getCustomerPackageData(msisdn));
             System.out.println("*** KAFKA SENT ***");
-        } else {
+        }
+        else if (requestUsageAmount > userDataBalance){
+            System.out.println("Too big setting balance to 0");
+            voltOperation.setInternetBalance(0,msisdn);
+
+        }
+
+        else {
             int remainingUsage = requestUsageAmount - userDataBalance;
             requestMessage.setUsageAmount(remainingUsage);
             requestMessage.calculateTotalPrice();

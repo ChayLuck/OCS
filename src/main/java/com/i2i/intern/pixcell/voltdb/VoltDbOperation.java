@@ -213,7 +213,7 @@ public class VoltDbOperation {
         return -1;
     }
 
-    private void setMinutesBalance(int amount_minutes, long MSISDN) {
+    public void setMinutesBalance(int amount_minutes, long MSISDN) {
         ClientResponse response = null;
         try {
             response = clientInstance.callProcedure("UpdateCustomerMinutes", amount_minutes, MSISDN);
@@ -223,7 +223,7 @@ public class VoltDbOperation {
         }
     }
 
-    private void setInternetBalance(int amount_internet, long MSISDN) {
+    public void setInternetBalance(int amount_internet, long MSISDN) {
         ClientResponse response = null;
         try {
             response = clientInstance.callProcedure("UpdateCustomerData", amount_internet, MSISDN);
@@ -233,7 +233,7 @@ public class VoltDbOperation {
         }
     }
 
-    private void setSmsBalance(int amount_sms, long MSISDN) {
+    public void setSmsBalance(int amount_sms, long MSISDN) {
         ClientResponse response = null;
         try {
             response = clientInstance.callProcedure("UpdateCustomerSms", amount_sms, MSISDN);
