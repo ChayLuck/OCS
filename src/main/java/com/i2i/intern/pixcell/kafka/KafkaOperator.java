@@ -68,16 +68,16 @@ public class KafkaOperator {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //usage topic date ekle CGF
-    public void sendKafkaUsageDataMessage(String type,long msisdn, int remain) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d}",type, msisdn, remain);
+    public void sendKafkaUsageDataMessage(String type,long msisdn, int remain,int amount) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d, \"amount\": %d}",type, msisdn, remain,amount);
         sendKafkaMessage(topicUsage,message);
     }
-    public void sendKafkaUsageVoiceMessage(String type,long msisdn, int remain) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d}",type, msisdn, remain);
+    public void sendKafkaUsageVoiceMessage(String type,long msisdn, int remain,int amount) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d, \"amount\": %d}",type, msisdn, remain,amount);
         sendKafkaMessage(topicUsage,message);
     }
-    public void sendKafkaUsageSmsMessage(String type,long msisdn, int remain) {
-        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d}",type, msisdn, remain);
+    public void sendKafkaUsageSmsMessage(String type,long msisdn, int remain,int amount) {
+        String message = String.format("{\"type\": \"%s\",\"msisdn\": \"%d\", \"remain\": %d, \"amount\": %d}",type, msisdn, remain,amount);
         sendKafkaMessage(topicUsage,message);
     }
 
