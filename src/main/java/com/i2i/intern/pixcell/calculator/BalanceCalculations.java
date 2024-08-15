@@ -112,7 +112,7 @@ public class BalanceCalculations {
         double totalPrice = requestMessage.getTotalUsagePrice();
         long msisdn = Long.parseLong(requestMessage.getSenderMSISDN());
 
-        int userDataBalance = voltOperation.getMinutesBalance(msisdn);
+        int userDataBalance = voltOperation.getInternetBalance(msisdn);
         int userWalletBalance = voltOperation.getMoneyBalance(msisdn);
         int uID = voltOperation.getUserID(msisdn);
 
